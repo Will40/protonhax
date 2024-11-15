@@ -25,9 +25,15 @@ c=$1
 shift
 
 if [[ "$c" == "init" ]]; then
-    mkdir -p $phd/$SteamAppId
-    printf "%s\n" "${@}" | grep -m 1 "/proton" > $phd/$SteamAppId/exe
-    printf "%s" "$STEAM_COMPAT_DATA_PATH/pfx" > $phd/$SteamAppId/pfx
+    mkdir -p $phd/${SteamAppId:=lutris}
+    if [ -z "${PROTONPATH}" ]; then
+      printf "%s\n" "${@}" | grep -m 1 "/proton" > $phd/$SteamAppId/exe
+    else
+      printf "%s\n" "$PROTONPATH/proton"  > $phd/$SteamAppId/exe
+    fi
+    printf "%s" "${STEAM_COMPAT_DATA_PATH:=$GAME_DIRECTORY}/pfx" > $phd/$SteamAppId/pfx
+    export STEAM_COMPAT_DATA_PATH
+    export STEAM_COMPAT_CLIENT_INSTALL_PATH="$HOME/.steam/steam"
     declare -px > $phd/$SteamAppId/env
     "$@"
     ec=$?

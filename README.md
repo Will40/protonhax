@@ -1,6 +1,6 @@
 # protonhax
 
-Tool to help running other programs (i.e. Cheat Engine) inside Steam's proton.
+Tool to help running other programs (i.e. Cheat Engine) inside Steam's proton. Now with Lutris support.
 
 ## Usage
 Set the steam game launch options to `protonhax init %COMMAND%`
@@ -8,6 +8,13 @@ Set the steam game launch options to `protonhax init %COMMAND%`
 On your Steam Library:
 - Right-click the game > Properties > General.
 - Set Launch Options as `protonhax init %COMMAND%`.
+
+On Lutris:
+- Right-click the game > Configure > System Options > Game Execution
+- Set Command prefix as `protonhax init`
+- (Optionally) Add environment variable `SteamAppId` with games steam ID, you can Look it up on [steamdb.info](https://steamdb.info/).
+  
+    **NOTE:** If `SteamAppId` is not set, the game will show up as `lutris` in `protonhax ls` command
 
 Now, you can use your terminal to run the following commands:
 
@@ -29,7 +36,7 @@ NOTE: The PATH variable is ignored
 
 **protonhax** is currently a single bash script, you just need to add it to your $PATH. 
 
-1. Either clone our repo `https://github.com/jcnils/protonhax.git`, or download the source from our [release page](https://github.com/jcnils/protonhax/releases)
+1. Either clone our repo `https://github.com/Will40/protonhax.git`, or download the source from our [release page](https://github.com/Will40/protonhax/releases)
 2. Copy the **protonhax** file to where you preffer and give it permission to execute:
     - Example of locations `$HOME/.local/bin/protonhax`, `/usr/bin/protonhax`. They need to be on your $PATH
     - Permission `chmod 755 protonhax`.
@@ -37,6 +44,9 @@ NOTE: The PATH variable is ignored
 ### Arch Linux
 - https://aur.archlinux.org/packages/protonhax
 - https://aur.archlinux.org/packages/protonhax-git/
+  
+    **NOTE:** This specific fork is not on any linux packaging systems, including AUR. Please use manual installation method.
+
 
 ## Debug and Troubleshoot
 

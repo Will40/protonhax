@@ -10,7 +10,7 @@ On your Steam Library:
 - Set Launch Options as `protonhax init %COMMAND%`.
 
 On Lutris:
-- Right-click the game > Configure > System Options > Game Execution
+- Right-click the game > Configure > System Options > Click on "Advanced" Toggle > Game Execution
 - Set Command prefix as `protonhax init`
 - (Optionally) Add environment variable `SteamAppId` with games steam ID, you can Look it up on [steamdb.info](https://steamdb.info/).
   

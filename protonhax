@@ -26,14 +26,23 @@ shift
 
 if [[ "$c" == "init" ]]; then
     mkdir -p $phd/${SteamAppId:=lutris}
-    if [ -z "${PROTONPATH}" ]; then
-      printf "%s\n" "${@}" | grep -m 1 "/proton" > $phd/$SteamAppId/exe
-    else
+    export PROTONHAX_VERB="run"
+    if [ ! -z "${PROTONPATH}" ]; then 
+      # Lutris Proton
       printf "%s\n" "$PROTONPATH/proton"  > $phd/$SteamAppId/exe
+      export STEAM_COMPAT_DATA_PATH="${STEAM_COMPAT_DATA_PATH:-$WINEPREFIX}"
+      export STEAM_COMPAT_CLIENT_INSTALL_PATH="$HOME/.steam/steam"
+      printf "%s" "${STEAM_COMPAT_DATA_PATH:=$GAME_DIRECTORY}/pfx" > $phd/$SteamAppId/pfx
+    elif [ ! -z "${WINE}" ]; then
+      # Lutris Wine
+      printf "%s\n" "${WINE}" > $phd/$SteamAppId/exe
+      printf "%s" "${WINEPREFIX}" > $phd/$SteamAppId/pfx
+      export PROTONHAX_VERB=""
+    else
+      # Assume Steam Proton
+      printf "%s\n" "${@}" | grep -m 1 "/proton" > $phd/$SteamAppId/exe
+      printf "%s" "$STEAM_COMPAT_DATA_PATH/pfx" > $phd/$SteamAppId/pfx 
     fi
-    printf "%s" "${STEAM_COMPAT_DATA_PATH:=$GAME_DIRECTORY}/pfx" > $phd/$SteamAppId/pfx
-    export STEAM_COMPAT_DATA_PATH
-    export STEAM_COMPAT_CLIENT_INSTALL_PATH="$HOME/.steam/steam"
     declare -px > $phd/$SteamAppId/env
     "$@"
     ec=$?
@@ -66,9 +75,9 @@ elif [[ "$c" == "run" ]] || [[ "$c" == "cmd" ]] || [[ "$c" == "exec" ]]; then
             usage
             exit 1
         fi
-        exec "$(cat $phd/$SteamAppId/exe)" run "$@"
+        exec "$(cat $phd/$SteamAppId/exe)" $PROTONHAX_VERB "$@"
     elif [[ "$c" == "cmd" ]]; then
-        exec "$(cat $phd/$SteamAppId/exe)" run "$(cat $phd/$SteamAppId/pfx)/drive_c/windows/system32/cmd.exe"
+        exec "$(cat $phd/$SteamAppId/exe)" $PROTONHAX_VERB "$(cat $phd/$SteamAppId/pfx)/drive_c/windows/system32/cmd.exe"
     elif [[ "$c" == "exec" ]]; then
         if [[ $# -lt 1 ]]; then
             usage
